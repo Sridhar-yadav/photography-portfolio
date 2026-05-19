@@ -1,4 +1,4 @@
-# 📸 Shriva.Studios — Luxury Cinematic Photography Portfolio
+# 📸 .Studios — Luxury Cinematic Photography Portfolio
 
 A premium, full-stack photography portfolio and admin CMS platform built for cinematic wedding and event photographers. Features a stunning public-facing website with dark/light themes, smooth animations, and a secure internal admin dashboard for managing portfolios, films, inquiries, and more.
 
@@ -13,7 +13,7 @@ A premium, full-stack photography portfolio and admin CMS platform built for cin
 ## ✨ Features
 
 ### 🌐 Public Website
-- **Home** — Hero section with cinematic animations, featured stories, films preview, testimonials, Instagram feed, and contact CTA
+- **Home** — Hero section with cinematic animations, featured stories, film previews, testimonials, Instagram feed, and contact CTA
 - **Stories** — Filterable portfolio gallery with category tabs (Weddings, Pre-Weddings, Maternity)
 - **Story Detail** — Individual gallery pages with image grids
 - **Films** — Cinematic video portfolio with embedded YouTube/Vimeo players
