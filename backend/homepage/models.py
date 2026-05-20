@@ -1,10 +1,9 @@
 from django.db import models
-from cloudinary.models import CloudinaryField
 
 class Homepage(models.Model):
     hero_text = models.CharField(max_length=255, default="Capturing Timeless Moments")
     tagline = models.TextField(default="Luxury cinematic photography for the modern romantic.")
-    hero_image = CloudinaryField('image', folder='homepage', null=True, blank=True)
+    hero_image = models.ImageField(upload_to='homepage/', null=True, blank=True)
     
     # Ensures only one instance exists
     def save(self, *args, **kwargs):

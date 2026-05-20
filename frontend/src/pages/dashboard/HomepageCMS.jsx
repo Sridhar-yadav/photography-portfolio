@@ -4,6 +4,7 @@ import { homepageAPI } from '../../services/api';
 const HomepageCMS = () => {
   const [data, setData] = useState({ hero_text: '', tagline: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -23,6 +24,33 @@ const HomepageCMS = () => {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setIsSaving(true);
+      const formData = new FormData();
+      formData.append('hero_text', data.hero_text);
+      formData.append('tagline', data.tagline);
+
+      let res;
+      if (data.id) {
+        res = await homepageAPI.update(data.id, formData);
+      } else {
+        res = await homepageAPI.create(formData);
+      }
+      
+      if (res.data) {
+        setData(res.data);
+        alert('Homepage settings saved successfully!');
+      }
+    } catch (error) {
+      console.error('Failed to save homepage settings', error);
+      alert('Failed to save homepage settings. Please check your backend logs.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
@@ -34,7 +62,7 @@ const HomepageCMS = () => {
         <p className="text-textSecondary">Loading content...</p>
       ) : (
         <div className="bg-surface/50 border border-textPrimary/10 p-8 backdrop-blur-sm">
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label className="block text-xs uppercase tracking-widest text-textSecondary mb-2">Hero Text</label>
               <input 
@@ -42,6 +70,7 @@ const HomepageCMS = () => {
                 value={data.hero_text}
                 onChange={(e) => setData({ ...data, hero_text: e.target.value })}
                 className="w-full bg-surface/30 border border-textPrimary/20 p-3 focus:outline-none focus:border-textPrimary text-xl font-display" 
+                required
               />
             </div>
             
@@ -52,10 +81,13 @@ const HomepageCMS = () => {
                 value={data.tagline}
                 onChange={(e) => setData({ ...data, tagline: e.target.value })}
                 className="w-full bg-surface/30 border border-textPrimary/20 p-3 focus:outline-none focus:border-textPrimary resize-none" 
+                required
               />
             </div>
 
-            <button type="button" className="btn-primary w-full">Save Changes</button>
+            <button type="submit" disabled={isSaving} className="btn-primary w-full">
+              {isSaving ? 'Saving Changes...' : 'Save Changes'}
+            </button>
           </form>
         </div>
       )}

@@ -1,7 +1,30 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+import { homepageAPI } from '../services/api';
 
 const Hero = () => {
+  const [cmsData, setCmsData] = useState({
+    hero_text: "Timeless \n Elegance",
+    tagline: "Fine Art Cinematic Photography"
+  });
+
+  useEffect(() => {
+    const fetchCms = async () => {
+      try {
+        const res = await homepageAPI.getAll();
+        if (res.data && res.data.length > 0) {
+          setCmsData({
+            hero_text: res.data[0].hero_text,
+            tagline: res.data[0].tagline
+          });
+        }
+      } catch (err) {
+        console.warn("Using fallback hero settings. DB might not be connected.");
+      }
+    };
+    fetchCms();
+  }, []);
+
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -35,7 +58,7 @@ const Hero = () => {
           transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
           className="text-white/80 uppercase tracking-[0.4em] text-sm md:text-base mb-6"
         >
-          Fine Art Cinematic Photography
+          {cmsData.tagline}
         </motion.p>
         
         <motion.h1 
@@ -43,8 +66,9 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
           className="text-6xl md:text-8xl lg:text-9xl font-display text-white mb-8 leading-tight tracking-tighter"
+          style={{ whiteSpace: 'pre-wrap' }}
         >
-          Timeless <br className="hidden md:block" /> Elegance
+          {cmsData.hero_text}
         </motion.h1>
 
         <motion.div 

@@ -34,9 +34,9 @@ const Contact = () => {
   return (
     <div className="pt-32 pb-20 px-6 max-w-[90rem] mx-auto min-h-screen">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-        
+
         {/* Information Side */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1 }}
@@ -49,7 +49,7 @@ const Contact = () => {
           <p className="text-textSecondary mb-16 text-lg leading-relaxed max-w-md">
             We accept a highly limited number of commissions each year to ensure the absolute highest level of dedication and artistry for each client.
           </p>
-          
+
           <div className="space-y-10 text-sm tracking-widest uppercase">
             <div>
               <span className="text-textSecondary block mb-2 text-xs">Email Inquiries</span>
@@ -57,17 +57,17 @@ const Contact = () => {
             </div>
             <div>
               <span className="text-textSecondary block mb-2 text-xs">Direct Line</span>
-              <a href="tel:+15551234567" className="hover:text-accent transition-colors">+1 (555) 123-4567</a>
+              <a href="tel:+15551234567" className="hover:text-accent transition-colors">+91 9876543210</a>
             </div>
             <div>
               <span className="text-textSecondary block mb-2 text-xs">Studio Location</span>
-              <p>123 Luxury Ave, New York, NY</p>
+              <p>Hyderabad, Telangana</p>
             </div>
           </div>
         </motion.div>
-        
+
         {/* Form Side */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
@@ -117,7 +117,7 @@ const Contact = () => {
       </div>
 
       {/* Map Placeholder */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

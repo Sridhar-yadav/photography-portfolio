@@ -21,7 +21,10 @@ const Login = () => {
     
     try {
       const response = await authAPI.login({ username, password });
-      dispatch(setCredentials({ access: response.data.access }));
+      dispatch(setCredentials({ 
+        access: response.data.access, 
+        refresh: response.data.refresh 
+      }));
       navigate('/dashboard');
     } catch (err) {
       setError('Invalid username or password.');

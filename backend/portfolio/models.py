@@ -4,6 +4,8 @@ class Portfolio(models.Model):
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    location = models.CharField(max_length=200, blank=True, null=True)
+    event_date = models.DateField(blank=True, null=True)
     cover_image = models.ImageField(upload_to='portfolio/covers/')
     created_at = models.DateTimeField(auto_now_add=True)
 

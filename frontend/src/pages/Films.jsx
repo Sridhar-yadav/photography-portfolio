@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Play } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { filmsAPI } from '../services/api';
 
 const fallbackFilms = [
@@ -49,33 +50,38 @@ const Films = () => {
         
         <div className="flex flex-col gap-24">
           {films.map((film, i) => (
-            <motion.div 
+            <Link 
               key={film.id}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 1, delay: i * 0.2 }}
-              className="group relative w-full aspect-video md:aspect-[21/9] bg-surface/10 cursor-pointer overflow-hidden"
+              to={`/films/${film.id}`}
+              className="group relative w-full aspect-video md:aspect-[21/9] bg-surface/10 cursor-pointer overflow-hidden block"
             >
-              <img 
-                src={film.img} 
-                alt={film.title}
-                className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
-              />
-              
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+              <motion.div 
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 1, delay: i * 0.2 }}
+                className="w-full h-full"
+              >
+                <img 
+                  src={film.img} 
+                  alt={film.title}
+                  className="w-full h-full object-cover opacity-70 group-hover:opacity-100 transition-all duration-1000 group-hover:scale-105"
+                />
+                
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
 
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 rounded-full border-2 border-white/30 backdrop-blur-md flex items-center justify-center group-hover:scale-110 group-hover:bg-white transition-all duration-500">
-                  <Play className="ml-2 text-white group-hover:text-black transition-colors" size={32} />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-24 h-24 rounded-full border-2 border-white/30 backdrop-blur-md flex items-center justify-center group-hover:scale-110 group-hover:bg-white transition-all duration-500">
+                    <Play className="ml-2 text-white group-hover:text-black transition-colors" size={32} />
+                  </div>
                 </div>
-              </div>
 
-              <div className="absolute bottom-12 left-12 text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                <p className="text-accent uppercase tracking-[0.3em] text-xs mb-4">{film.category}</p>
-                <h3 className="text-4xl md:text-6xl font-display text-white tracking-wide">{film.title}</h3>
-              </div>
-            </motion.div>
+                <div className="absolute bottom-12 left-12 text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                  <p className="text-accent uppercase tracking-[0.3em] text-xs mb-4">{film.category}</p>
+                  <h3 className="text-4xl md:text-6xl font-display text-white tracking-wide">{film.title}</h3>
+                </div>
+              </motion.div>
+            </Link>
           ))}
         </div>
       </div>

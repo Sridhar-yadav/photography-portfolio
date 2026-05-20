@@ -13,6 +13,7 @@ const PortfolioManager = () => {
   // Form State
   const [formData, setFormData] = useState({ title: '', category: '', description: '', location: '', event_date: '' });
   const [coverImage, setCoverImage] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
     fetchStories();
@@ -39,17 +40,24 @@ const PortfolioManager = () => {
     data.append('description', formData.description);
     data.append('location', formData.location);
     data.append('event_date', formData.event_date);
+    
     if (coverImage) {
       data.append('cover_image', coverImage);
     }
+    
+    if (galleryImages.length > 0) {
+      galleryImages.forEach((file) => {
+        data.append('gallery_images', file);
+      });
+    }
 
     try {
-      // For Phase 2 MVP, just assuming create. Update logic can be added later.
       await portfolioAPI.create(data);
       fetchStories();
       setIsModalOpen(false);
       setFormData({ title: '', category: '', description: '', location: '', event_date: '' });
       setCoverImage(null);
+      setGalleryImages([]);
     } catch (error) {
       console.error('Failed to save story', error);
       alert('Failed to save story. Please check your Cloudinary keys and backend logs.');
@@ -106,8 +114,37 @@ const PortfolioManager = () => {
               </select>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-textSecondary mb-2">Location</label>
+              <input type="text" value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})} className="w-full bg-surface/30 border border-textPrimary/20 p-3 focus:outline-none focus:border-textPrimary" placeholder="e.g. Lake Como, Italy" />
+            </div>
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-textSecondary mb-2">Event Date</label>
+              <input type="date" value={formData.event_date} onChange={e => setFormData({...formData, event_date: e.target.value})} className="w-full bg-surface/30 border border-textPrimary/20 p-3 focus:outline-none focus:border-textPrimary" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs uppercase tracking-widest text-textSecondary mb-2">Description</label>
+            <textarea rows="3" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full bg-surface/30 border border-textPrimary/20 p-3 focus:outline-none focus:border-textPrimary resize-none" placeholder="Details about this story..." required />
+          </div>
           
-          <Dropzone file={coverImage} setFile={setCoverImage} label="Cover Image" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Dropzone file={coverImage} setFile={setCoverImage} label="Cover Image" />
+            
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-textSecondary mb-2">Gallery Images</label>
+              <input 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                onChange={e => setGalleryImages(Array.from(e.target.files))} 
+                className="w-full text-sm text-textSecondary file:mr-4 file:py-2 file:px-4 file:border file:border-textPrimary/20 file:bg-surface/30 file:text-textPrimary file:text-xs file:uppercase file:tracking-widest"
+              />
+            </div>
+          </div>
 
           <button type="submit" className="w-full btn-primary">Save Story</button>
         </form>

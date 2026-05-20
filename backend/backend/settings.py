@@ -170,14 +170,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # CORS Settings
 CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=['http://localhost:5173'])
 
+# Cloudinary config
+CLOUDINARY_CLOUD_NAME = env('CLOUDINARY_CLOUD_NAME', default='your_cloud_name')
+CLOUDINARY_API_KEY = env('CLOUDINARY_API_KEY', default='your_api_key')
+CLOUDINARY_API_SECRET = env('CLOUDINARY_API_SECRET', default='your_api_secret')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': CLOUDINARY_CLOUD_NAME,
+    'API_KEY': CLOUDINARY_API_KEY,
+    'API_SECRET': CLOUDINARY_API_SECRET
+}
+
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Cloudinary config
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default='your_cloud_name'),
-    'API_KEY': env('CLOUDINARY_API_KEY', default='your_api_key'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET', default='your_api_secret')
-}
+# Use local storage if Cloudinary is not configured or uses placeholder credentials
+if CLOUDINARY_CLOUD_NAME == 'your_cloud_name' or not CLOUDINARY_CLOUD_NAME:
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+else:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+

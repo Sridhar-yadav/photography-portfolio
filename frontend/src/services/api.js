@@ -21,6 +21,36 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor to automatically refresh access token on 401 Unauthorized
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = localStorage.getItem('refresh_token');
+        if (refreshToken) {
+          // Call the refresh endpoint directly using a clean axios call to avoid auth headers loop
+          const res = await axios.post(`${API_URL}auth/refresh/`, { refresh: refreshToken });
+          if (res.status === 200) {
+            const { access } = res.data;
+            localStorage.setItem('token', access);
+            originalRequest.headers.Authorization = `Bearer ${access}`;
+            return api(originalRequest);
+          }
+        }
+      } catch (refreshError) {
+        // Refresh token is expired or invalid, clear everything and redirect to login
+        localStorage.removeItem('token');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const authAPI = {
   login: (credentials) => api.post('auth/login/', credentials),
   refresh: (token) => api.post('auth/refresh/', { refresh: token }),
@@ -66,6 +96,9 @@ export const productsAPI = {
 
 export const homepageAPI = {
   getAll: () => api.get('homepage/'),
+  create: (data) => api.post('homepage/', data, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
   update: (id, data) => api.put(`homepage/${id}/`, data, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),

@@ -3,7 +3,7 @@ from django.db import models
 class Film(models.Model):
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=100)
-    thumbnail = models.ImageField(upload_to='films/thumbnails/')
+    thumbnail = models.ImageField(upload_to='films/thumbnails/', blank=True, null=True)
     video_url = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
 
